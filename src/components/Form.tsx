@@ -7,8 +7,9 @@ import {
   TextInput,
   View,
   ScrollView,
+  Pressable,
 } from 'react-native';
-
+import DatePicker from 'react-native-date-picker';
 interface IFormProps {
   isOpenModal: boolean;
 }
@@ -18,6 +19,7 @@ const Form: React.FC<IFormProps> = ({isOpenModal}) => {
   const [owner, setOwner] = useState('');
   const [mail, setMail] = useState('');
   const [phone, setPhone] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [symptoms, setSymptoms] = useState('');
 
   return (
@@ -28,6 +30,10 @@ const Form: React.FC<IFormProps> = ({isOpenModal}) => {
             Nueva {''}
             <Text style={styles.tituloBold}>Cita</Text>
           </Text>
+          <Pressable>
+            <Text>X Cancelar</Text>
+          </Pressable>
+
           <View style={styles.content}>
             <Text style={styles.label}>Nombre Paciente</Text>
             <TextInput
@@ -70,6 +76,15 @@ const Form: React.FC<IFormProps> = ({isOpenModal}) => {
               onChangeText={setPhone}
               maxLength={10}
             />
+          </View>
+          <View style={styles.content}>
+            <Text style={styles.label}>Fecha Alta </Text>
+            <View style={styles.dateContainer}>
+              <DatePicker
+                date={selectedDate}
+                onDateChange={date => setSelectedDate(date)}
+              />
+            </View>
           </View>
           <View style={styles.content}>
             <Text style={styles.label}>Sintomas</Text>
@@ -123,6 +138,10 @@ const styles = StyleSheet.create({
   },
   symptomsInput: {
     height: 100,
+  },
+  dateContainer: {
+    backgroundColor: '#FFF',
+    borderRadius: 10,
   },
 });
 
