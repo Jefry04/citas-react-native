@@ -4,8 +4,10 @@ import Form from './src/components/Form';
 
 function App(): JSX.Element {
   const [isOPenModal, setIsOpenModal] = useState<boolean>(false);
+  const [patients, setPatients] = useState([]);
 
   const newDateHandler = () => setIsOpenModal(true);
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
@@ -15,7 +17,12 @@ function App(): JSX.Element {
       <Pressable onPress={newDateHandler} style={styles.btnNuevaCita}>
         <Text style={styles.btnTextnewDate}>NUEVA CITA</Text>
       </Pressable>
-      <Form isOpenModal={isOPenModal} />
+      <Form
+        isOpenModal={isOPenModal}
+        setIsOpenModal={setIsOpenModal}
+        setPatients={setPatients}
+        patients={patients}
+      />
     </SafeAreaView>
   );
 }

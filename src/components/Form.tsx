@@ -8,13 +8,24 @@ import {
   View,
   ScrollView,
   Pressable,
+  Alert,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
+
+//todo: Type interfaces
 interface IFormProps {
   isOpenModal: boolean;
+  setIsOpenModal: any;
+  setPatients: any;
+  patients: any;
 }
 
-const Form: React.FC<IFormProps> = ({isOpenModal}) => {
+const Form: React.FC<IFormProps> = ({
+  isOpenModal,
+  setIsOpenModal,
+  setPatients,
+  patients,
+}) => {
   const [patient, setPatient] = useState('');
   const [owner, setOwner] = useState('');
   const [mail, setMail] = useState('');
@@ -22,18 +33,41 @@ const Form: React.FC<IFormProps> = ({isOpenModal}) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [symptoms, setSymptoms] = useState('');
 
+  const hanldeNewAppointment = () => {
+    if ([patient, owner, mail, phone, selectedDate, symptoms].includes('')) {
+      Alert.alert('error', 'todos los campos son obligatorios');
+      return;
+    }
+    const newPatient = {
+      patient,
+      owner,
+      mail,
+      phone,
+      selectedDate,
+      symptoms,
+    };
+    setPatients([...patients, newPatient]);
+    setIsOpenModal(false);
+    setPatient('');
+    setOwner('');
+    setMail('');
+    setPhone('');
+    setSelectedDate(new Date());
+    setSymptoms('');
+  };
   return (
     <Modal animationType="slide" visible={isOpenModal}>
       <SafeAreaView style={styles.contenido}>
         <ScrollView>
           <Text style={styles.titulo}>
-            Nueva {''}
+            Nueva s{''}
             <Text style={styles.tituloBold}>Cita</Text>
           </Text>
-          <Pressable>
-            <Text>X Cancelar</Text>
+          <Pressable
+            style={styles.btnCancel}
+            onLongPress={() => setIsOpenModal(false)}>
+            <Text style={styles.btnCancelText}>X CANCELAR</Text>
           </Pressable>
-
           <View style={styles.content}>
             <Text style={styles.label}>Nombre Paciente</Text>
             <TextInput
@@ -98,6 +132,11 @@ const Form: React.FC<IFormProps> = ({isOpenModal}) => {
               numberOfLines={4}
             />
           </View>
+          <Pressable
+            style={styles.btnNewAppointment}
+            onPress={hanldeNewAppointment}>
+            <Text style={styles.btnNewAppointmentText}>AGREGAR PACIENTE</Text>
+          </Pressable>
         </ScrollView>
       </SafeAreaView>
     </Modal>
@@ -118,6 +157,21 @@ const styles = StyleSheet.create({
   },
   tituloBold: {
     fontWeight: '900',
+  },
+  btnCancel: {
+    marginVertical: 30,
+    backgroundColor: '#5827a4',
+    marginHorizontal: 30,
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#FFF',
+  },
+  btnCancelText: {
+    color: '#FFF',
+    textAlign: 'center',
+    fontWeight: '900',
+    fontSize: 20,
   },
   content: {
     marginTop: 10,
@@ -142,6 +196,19 @@ const styles = StyleSheet.create({
   dateContainer: {
     backgroundColor: '#FFF',
     borderRadius: 10,
+  },
+  btnNewAppointment: {
+    marginVertical: 50,
+    backgroundColor: '#f59e0b',
+    paddingVertical: 15,
+    marginHorizontal: 30,
+    borderRadius: 10,
+  },
+  btnNewAppointmentText: {
+    color: '#5827a4',
+    textAlign: 'center',
+    fontWeight: '900',
+    fontSize: 16,
   },
 });
 
