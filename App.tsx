@@ -1,10 +1,27 @@
 import React, {useState} from 'react';
-import {SafeAreaView, Text, StyleSheet, Pressable} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  Pressable,
+  FlatList,
+} from 'react-native';
 import Form from './src/components/Form';
+import Patient from './src/components/Patient';
+
+interface IPatient {
+  id: string;
+  patient: string;
+  owner: string;
+  mail: string;
+  phone: number;
+  selectedDate: string;
+  symptoms: string;
+}
 
 function App(): JSX.Element {
   const [isOPenModal, setIsOpenModal] = useState<boolean>(false);
-  const [patients, setPatients] = useState([]);
+  const [patients, setPatients] = useState<IPatient[]>([]);
 
   const newDateHandler = () => setIsOpenModal(true);
 
@@ -17,6 +34,18 @@ function App(): JSX.Element {
       <Pressable onPress={newDateHandler} style={styles.btnNuevaCita}>
         <Text style={styles.btnTextnewDate}>NUEVA CITA</Text>
       </Pressable>
+      {patients.length === 0 ? (
+        <Text style={styles.noPatients}>No hay pacientes</Text>
+      ) : (
+        <FlatList
+          style={styles.patientList}
+          data={patients}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => {
+            return <Patient patients={item} />;
+          }}
+        />
+      )}
       <Form
         isOpenModal={isOPenModal}
         setIsOpenModal={setIsOpenModal}
@@ -54,6 +83,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: '900',
+  },
+  noPatients: {
+    marginTop: 40,
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  patientList: {
+    marginTop: 50,
+    marginHorizontal: 30,
   },
 });
 export default App;

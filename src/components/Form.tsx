@@ -17,7 +17,17 @@ interface IFormProps {
   isOpenModal: boolean;
   setIsOpenModal: any;
   setPatients: any;
-  patients: any;
+  patients: IPatient[];
+}
+
+interface IPatient {
+  id: string;
+  patient: string;
+  owner: string;
+  mail: string;
+  phone: number;
+  selectedDate: string;
+  symptoms: string;
 }
 
 const Form: React.FC<IFormProps> = ({
@@ -39,6 +49,7 @@ const Form: React.FC<IFormProps> = ({
       return;
     }
     const newPatient = {
+      id: Date.now(),
       patient,
       owner,
       mail,
