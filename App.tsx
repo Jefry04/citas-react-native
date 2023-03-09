@@ -10,20 +10,24 @@ import Form from './src/components/Form';
 import Patient from './src/components/Patient';
 
 interface IPatient {
-  id: string;
+  id: number;
   patient: string;
   owner: string;
   mail: string;
-  phone: number;
-  selectedDate: string;
+  phone: string;
+  selectedDate: Date;
   symptoms: string;
 }
 
 function App(): JSX.Element {
   const [isOPenModal, setIsOpenModal] = useState<boolean>(false);
   const [patients, setPatients] = useState<IPatient[]>([]);
+  const [patient, setPatient] = useState({});
 
-  const newDateHandler = () => setIsOpenModal(true);
+  const editPatient = (id: number) => {
+    const selectedPatient = patients.filter(item => item.id === id);
+    setPatient(selectedPatient[0]);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -31,7 +35,9 @@ function App(): JSX.Element {
         Administrador de citas {''}
         <Text style={styles.titleBold}>Veterinaria</Text>
       </Text>
-      <Pressable onPress={newDateHandler} style={styles.btnNuevaCita}>
+      <Pressable
+        onPress={() => setIsOpenModal(true)}
+        style={styles.btnNuevaCita}>
         <Text style={styles.btnTextnewDate}>NUEVA CITA</Text>
       </Pressable>
       {patients.length === 0 ? (
@@ -40,9 +46,15 @@ function App(): JSX.Element {
         <FlatList
           style={styles.patientList}
           data={patients}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id as unknown as string}
           renderItem={({item}) => {
-            return <Patient patients={item} />;
+            return (
+              <Patient
+                patients={item}
+                setIsOpenModal={setIsOpenModal}
+                editPatient={editPatient}
+              />
+            );
           }}
         />
       )}
@@ -51,6 +63,8 @@ function App(): JSX.Element {
         setIsOpenModal={setIsOpenModal}
         setPatients={setPatients}
         patients={patients}
+        selectedPatient={patient}
+        setPatient={setPatient}
       />
     </SafeAreaView>
   );

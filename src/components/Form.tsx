@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   Modal,
@@ -18,15 +18,17 @@ interface IFormProps {
   setIsOpenModal: any;
   setPatients: any;
   patients: IPatient[];
+  selectedPatient: any;
+  setPatient: any;
 }
 
 interface IPatient {
-  id: string;
+  id?: any;
   patient: string;
   owner: string;
   mail: string;
-  phone: number;
-  selectedDate: string;
+  phone: string;
+  selectedDate: Date;
   symptoms: string;
 }
 
@@ -35,7 +37,10 @@ const Form: React.FC<IFormProps> = ({
   setIsOpenModal,
   setPatients,
   patients,
+  selectedPatient,
+  setPatient: setPatientApp,
 }) => {
+  const [id, setId] = useState('');
   const [patient, setPatient] = useState('');
   const [owner, setOwner] = useState('');
   const [mail, setMail] = useState('');
@@ -48,8 +53,7 @@ const Form: React.FC<IFormProps> = ({
       Alert.alert('error', 'todos los campos son obligatorios');
       return;
     }
-    const newPatient = {
-      id: Date.now(),
+    const newPatient: IPatient = {
       patient,
       owner,
       mail,
@@ -57,26 +61,63 @@ const Form: React.FC<IFormProps> = ({
       selectedDate,
       symptoms,
     };
-    setPatients([...patients, newPatient]);
+
+    if (id) {
+      newPatient.id = id;
+      const updatedPatients = patients.map(item =>
+        item.id === newPatient.id ? newPatient : item,
+      );
+      setPatients(updatedPatients);
+      setPatientApp({});
+    } else {
+      newPatient.id = Date.now();
+      setPatients([...patients, newPatient]);
+    }
     setIsOpenModal(false);
     setPatient('');
     setOwner('');
     setMail('');
     setPhone('');
+    setId('');
     setSelectedDate(new Date());
     setSymptoms('');
   };
+
+  useEffect(() => {
+    if (Object.keys(selectedPatient).length > 0) {
+      setPatient(selectedPatient.patient);
+      setId(selectedPatient.id);
+      setOwner(selectedPatient.owner);
+      setMail(selectedPatient.mail);
+      setPhone(selectedPatient.phone);
+      setSelectedDate(selectedPatient.selectedDate);
+      setSymptoms(selectedPatient.symptoms);
+      console.log();
+    }
+  }, [selectedPatient]);
+
   return (
     <Modal animationType="slide" visible={isOpenModal}>
       <SafeAreaView style={styles.contenido}>
         <ScrollView>
           <Text style={styles.titulo}>
-            Nueva s{''}
+            {selectedPatient.id ? 'EDITAR' : 'NUEVA'} {''}
             <Text style={styles.tituloBold}>Cita</Text>
           </Text>
           <Pressable
             style={styles.btnCancel}
-            onLongPress={() => setIsOpenModal(false)}>
+            onPress={() => {
+              setIsOpenModal(false);
+              setIsOpenModal(false);
+              setPatient('');
+              setOwner('');
+              setMail('');
+              setId('');
+              setPhone('');
+              setSelectedDate(new Date());
+              setSymptoms('');
+              setPatientApp({});
+            }}>
             <Text style={styles.btnCancelText}>X CANCELAR</Text>
           </Pressable>
           <View style={styles.content}>
@@ -146,7 +187,9 @@ const Form: React.FC<IFormProps> = ({
           <Pressable
             style={styles.btnNewAppointment}
             onPress={hanldeNewAppointment}>
-            <Text style={styles.btnNewAppointmentText}>AGREGAR PACIENTE</Text>
+            <Text style={styles.btnNewAppointmentText}>
+              {selectedPatient.id ? 'EDITAR' : 'AGREGAR'} PACIENTE
+            </Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>
