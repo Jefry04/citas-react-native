@@ -5,6 +5,7 @@ interface IPatientProps {
   patients: IPatient;
   setIsOpenModal: Dispatch<SetStateAction<boolean>>;
   editPatient: (id: number) => void;
+  deletePatient: (id: number) => void;
 }
 interface IPatient {
   id: number;
@@ -20,6 +21,7 @@ const Patient: React.FC<IPatientProps> = ({
   patients,
   setIsOpenModal,
   editPatient,
+  deletePatient,
 }) => {
   const {patient, selectedDate, id} = patients;
 
@@ -49,7 +51,9 @@ const Patient: React.FC<IPatientProps> = ({
           }}>
           <Text style={styles.buttonstext}> Editar</Text>
         </Pressable>
-        <Pressable style={[styles.btn, styles.deleteBtn]}>
+        <Pressable
+          style={[styles.btn, styles.deleteBtn]}
+          onPress={() => deletePatient(id)}>
           <Text style={styles.buttonstext}> Eliminar</Text>
         </Pressable>
       </View>

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   FlatList,
+  Alert,
 } from 'react-native';
 import Form from './src/components/Form';
 import Patient from './src/components/Patient';
@@ -27,6 +28,25 @@ function App(): JSX.Element {
   const editPatient = (id: number) => {
     const selectedPatient = patients.filter(item => item.id === id);
     setPatient(selectedPatient[0]);
+  };
+
+  const deletePatient = (id: number) => {
+    Alert.alert(
+      '¿Desea Elminar este paciente?',
+      'Esta acción no se puede deshacer',
+      [
+        {text: 'Cancelar'},
+        {
+          text: 'eliminar',
+          onPress: () => {
+            const updatedPatients = patients.filter(
+              patientsState => patientsState.id !== id,
+            );
+            setPatients(updatedPatients);
+          },
+        },
+      ],
+    );
   };
 
   return (
@@ -53,6 +73,7 @@ function App(): JSX.Element {
                 patients={item}
                 setIsOpenModal={setIsOpenModal}
                 editPatient={editPatient}
+                deletePatient={deletePatient}
               />
             );
           }}
