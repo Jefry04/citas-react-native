@@ -6,6 +6,8 @@ interface IPatientProps {
   setIsOpenModal: Dispatch<SetStateAction<boolean>>;
   editPatient: (id: number) => void;
   deletePatient: (id: number) => void;
+  setPatientModal: Dispatch<SetStateAction<boolean>>;
+  setPatient: Dispatch<SetStateAction<any>>;
 }
 interface IPatient {
   id: number;
@@ -22,6 +24,8 @@ const Patient: React.FC<IPatientProps> = ({
   setIsOpenModal,
   editPatient,
   deletePatient,
+  setPatientModal,
+  setPatient,
 }) => {
   const {patient, selectedDate, id} = patients;
 
@@ -37,27 +41,33 @@ const Patient: React.FC<IPatientProps> = ({
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}> Paciente:</Text>
-      <Text style={styles.text}> {patient}</Text>
-      <Text style={styles.date}> {formatDate(selectedDate)}</Text>
+    <Pressable
+      onPress={() => {
+        setPatientModal(true);
+        setPatient(patients);
+      }}>
+      <View style={styles.container}>
+        <Text style={styles.label}> Paciente:</Text>
+        <Text style={styles.text}> {patient}</Text>
+        <Text style={styles.date}> {formatDate(selectedDate)}</Text>
 
-      <View style={styles.buttonsContainer}>
-        <Pressable
-          style={[styles.btn, styles.editBtn]}
-          onPress={() => {
-            editPatient(id);
-            setIsOpenModal(true);
-          }}>
-          <Text style={styles.buttonstext}> Editar</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.btn, styles.deleteBtn]}
-          onPress={() => deletePatient(id)}>
-          <Text style={styles.buttonstext}> Eliminar</Text>
-        </Pressable>
+        <View style={styles.buttonsContainer}>
+          <Pressable
+            style={[styles.btn, styles.editBtn]}
+            onPress={() => {
+              editPatient(id);
+              setIsOpenModal(true);
+            }}>
+            <Text style={styles.buttonstext}> Editar</Text>
+          </Pressable>
+          <Pressable
+            style={[styles.btn, styles.deleteBtn]}
+            onPress={() => deletePatient(id)}>
+            <Text style={styles.buttonstext}> Eliminar</Text>
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

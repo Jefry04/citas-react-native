@@ -6,9 +6,11 @@ import {
   Pressable,
   FlatList,
   Alert,
+  Modal,
 } from 'react-native';
 import Form from './src/components/Form';
 import Patient from './src/components/Patient';
+import PatientInfo from './src/components/PatientInfo';
 
 interface IPatient {
   id: number;
@@ -24,6 +26,7 @@ function App(): JSX.Element {
   const [isOPenModal, setIsOpenModal] = useState<boolean>(false);
   const [patients, setPatients] = useState<IPatient[]>([]);
   const [patient, setPatient] = useState({});
+  const [patientModal, setPatientModal] = useState(false);
 
   const editPatient = (id: number) => {
     const selectedPatient = patients.filter(item => item.id === id);
@@ -74,6 +77,8 @@ function App(): JSX.Element {
                 setIsOpenModal={setIsOpenModal}
                 editPatient={editPatient}
                 deletePatient={deletePatient}
+                setPatientModal={setPatientModal}
+                setPatient={setPatient}
               />
             );
           }}
@@ -87,6 +92,9 @@ function App(): JSX.Element {
         selectedPatient={patient}
         setPatient={setPatient}
       />
+      <Modal visible={patientModal} animationType={'fade'}>
+        <PatientInfo patient={patient} setPatientModal={setPatientModal} />
+      </Modal>
     </SafeAreaView>
   );
 }
