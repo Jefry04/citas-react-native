@@ -1,5 +1,6 @@
 import React, {Dispatch, SetStateAction} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {formatDate} from '../utils';
 
 interface IPatientProps {
   patients: IPatient;
@@ -28,17 +29,6 @@ const Patient: React.FC<IPatientProps> = ({
   setPatient,
 }) => {
   const {patient, selectedDate, id} = patients;
-
-  const formatDate = (date: Date) => {
-    const newDate = new Date(date);
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    };
-    return newDate.toLocaleDateString('es-Es', options);
-  };
 
   return (
     <Pressable

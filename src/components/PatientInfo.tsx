@@ -1,23 +1,17 @@
 import React from 'react';
 import {Text, SafeAreaView, Pressable, View, StyleSheet} from 'react-native';
+import {formatDate} from '../utils';
 
 interface IPatientInfoProps {
   patient: any;
   setPatientModal: any;
+  setPatient: any;
 }
-// interface IPatient {
-//   id: number;
-//   patient: string;
-//   owner: string;
-//   mail: string;
-//   phone: string;
-//   selectedDate: Date;
-//   symptoms: string;
-// }
 
 const PatientInfo: React.FC<IPatientInfoProps> = ({
   patient,
   setPatientModal,
+  setPatient,
 }) => {
   console.log(patient);
   return (
@@ -28,13 +22,39 @@ const PatientInfo: React.FC<IPatientInfoProps> = ({
           <Text style={styles.tituloBold}>Paciente</Text>
         </Text>
         <Pressable
-          onPress={() => setPatientModal(false)}
+          onPress={() => {
+            setPatientModal(false);
+            setPatient({});
+          }}
           style={styles.btnClose}>
           <Text style={styles.btnCloseText}>Cerrar</Text>
         </Pressable>
       </View>
       <View style={styles.content}>
-        <Text>{patient.patient}</Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.label}>Nombre Mascota:</Text>
+          <Text style={styles.text}>{patient.patient}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.label}>Propietario:</Text>
+          <Text style={styles.text}>{patient.mail}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.text}>{patient.owner}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.label}>Telefono:</Text>
+          <Text style={styles.text}>{patient.phone}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.label}>Fecha Alta:</Text>
+          <Text style={styles.text}>{formatDate(patient.selectedDate)}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.label}>Sintomas:</Text>
+          <Text style={styles.text}>{patient.symptoms}</Text>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -74,8 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     marginHorizontal: 30,
     borderRadius: 10,
-    padding: 10,
-    height: 300,
+    padding: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -85,6 +104,21 @@ const styles = StyleSheet.create({
     shadowRadius: 11.14,
 
     elevation: 17,
+  },
+  textContainer: {
+    marginBottom: 10,
+  },
+  label: {
+    textTransform: 'uppercase',
+    color: '#374151',
+    fontWeight: '600',
+    marginBottom: 3,
+    fontSize: 12,
+  },
+  text: {
+    fontWeight: '700',
+    fontSize: 20,
+    color: '#334155',
   },
 });
 export default PatientInfo;

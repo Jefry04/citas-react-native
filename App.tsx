@@ -84,16 +84,23 @@ function App(): JSX.Element {
           }}
         />
       )}
-      <Form
-        isOpenModal={isOPenModal}
-        setIsOpenModal={setIsOpenModal}
-        setPatients={setPatients}
-        patients={patients}
-        selectedPatient={patient}
-        setPatient={setPatient}
-      />
+      {isOPenModal && (
+        <Form
+          isOpenModal={isOPenModal}
+          setIsOpenModal={setIsOpenModal}
+          setPatients={setPatients}
+          patients={patients}
+          selectedPatient={patient}
+          setPatient={setPatient}
+        />
+      )}
+
       <Modal visible={patientModal} animationType={'fade'}>
-        <PatientInfo patient={patient} setPatientModal={setPatientModal} />
+        <PatientInfo
+          patient={patient}
+          setPatientModal={setPatientModal}
+          setPatient={setPatient}
+        />
       </Modal>
     </SafeAreaView>
   );
